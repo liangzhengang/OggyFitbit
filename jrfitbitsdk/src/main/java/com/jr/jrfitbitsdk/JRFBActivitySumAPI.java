@@ -43,8 +43,14 @@ public class JRFBActivitySumAPI extends JRFBBaseAPI {
     protected void didCompleteRequest(String result) {
         if (this.delegate != null) {
             JRFBActivitySummary summary =  JRFBActivitySumParser.parseActivity(result);
-            summary.setActivityDate(activityDate);
-            this.delegate.didFetchActivity(this,summary);
+            if (summary != null) {
+                summary.setActivityDate(activityDate);
+                this.delegate.didFetchActivity(this,summary);
+            } else {
+                didFailRequest();
+            }
+
+
         }
 
     }
