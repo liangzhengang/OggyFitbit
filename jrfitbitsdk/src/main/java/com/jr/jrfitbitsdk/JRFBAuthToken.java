@@ -12,10 +12,14 @@ public class JRFBAuthToken {
     private static final String PREFS_TOKEN_KEY = "Fitbit_Token";
     private static final String PREFS_EXPIRES_KEY = "Fitbit_Expires";
     private static final String PREFS_USER_ID = "Fitbit_User_ID";
+    private static final String GRANT_TYPE = "grant_type";
 
     private String authToken = null;
     private String expireTime = null;
     private String userId = null;
+
+    private String refresh_token=null;
+
 
     public JRFBAuthToken(Context context) {
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
