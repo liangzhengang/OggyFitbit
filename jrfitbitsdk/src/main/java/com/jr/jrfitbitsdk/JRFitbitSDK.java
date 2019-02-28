@@ -143,7 +143,7 @@ public class JRFitbitSDK {
             HttpParams params = new HttpParams();
             params.put("client_id", clientId);     //param支持中文,直接传,不要自己编码
             params.put("grant_type", "authorization_code");     //param支持中文,直接传,不要自己编码
-            params.put("redirect_uri", "senssunlife://home");     //param支持中文,直接传,不要自己编码
+            params.put("redirect_uri", callbackUrl);     //param支持中文,直接传,不要自己编码
             params.put("code", code);     //param支持中文,直接传,不要自己编码
             params.put("code_verifier", code_verifier);
             OkGo.<String>post("https://api.fitbit.com/oauth2/token").params(params).execute(new StringCallback() {
