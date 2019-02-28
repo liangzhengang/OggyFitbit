@@ -69,6 +69,8 @@ public class HomeActivity extends AppCompatActivity implements JRFBActivitySumma
             public void onClick(View view) {
                 List<String> list = new ArrayList<String>();
                 list.add("activity");
+                list.add("weight");
+                list.add("nutrition");
 
                 JRFitbitSDK.getInstance().authorize(HomeActivity.this, list);
             }

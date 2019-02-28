@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.jr.jrfitbitsdk.model.CodeBean;
+import com.jr.jrfitbitsdk.parser.APIContants;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
@@ -28,7 +29,9 @@ import com.lzy.okgo.model.Response;
 import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -52,6 +55,7 @@ public class JRFitbitSDK {
     private JRFBAuthToken token = null;
     private CodeBean codeBean = null;
     private Context context;
+    private List<APICallback> callbacks = new ArrayList<>();
 
     protected JRFitbitSDK() {
         // Exists only to defeat instantiation.
@@ -152,6 +156,9 @@ public class JRFitbitSDK {
                     editor.putString(CODESTRING, response.body());
                     editor.apply();
 
+                    for (APICallback cb : callbacks) {
+                        cb.onGetPkceCode(codeBean);
+                    }
                 }
             });
         }
@@ -178,4 +185,30 @@ public class JRFitbitSDK {
                 activeNetwork.isConnectedOrConnecting();
         return isConnected;
     }
+
+    public void addCallback(APICallback callback) {
+        callbacks.add(callback);
+    }
+
+    public void refreshToken() {
+        HttpParams params = new HttpParams();
+        params.put("grant_type", "refresh_token");
+        params.put("refresh_token", codeBean.getRefresh_token());
+        params.put("expires_in", "28800");
+        OkGo.<String>post(APIContants.tokenAPI).params(params).execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                codeBean = new Gson().fromJson(response.body(), CodeBean.class);
+                Log.e("onSuccess", new Gson().toJson(codeBean) + response.body());
+
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString(CODESTRING, response.body());
+                editor.apply();
+                for (APICallback callback : callbacks) {
+                    callback.onRefreshToken(codeBean);
+                }
+            }
+        });
+    }
+
 }
