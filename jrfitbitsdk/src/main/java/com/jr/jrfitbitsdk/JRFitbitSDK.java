@@ -211,4 +211,31 @@ public class JRFitbitSDK {
         });
     }
 
+    public void logWeight(String weight, String date, String time, final APICallback apiCallback) {
+        HttpParams params = new HttpParams();
+        params.put("weight", weight);
+        params.put("date", date);
+        params.put("time", time);
+        OkGo.<String>post(APIContants.logWeight).params(params).execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                if (apiCallback != null)
+                    apiCallback.onLogWeight();
+            }
+        });
+    }
+
+    public void logFat(String fat, String date, String time, final APICallback apiCallback) {
+        HttpParams params = new HttpParams();
+        params.put("weight", fat);
+        params.put("date", date);
+        params.put("time", time);
+        OkGo.<String>post(APIContants.logWeight).params(params).execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                if (apiCallback != null)
+                    apiCallback.onLogFat();
+            }
+        });
+    }
 }

@@ -71,12 +71,15 @@ public class HomeActivity extends AppCompatActivity implements JRFBActivitySumma
                 list.add("activity");
                 list.add("weight");
                 list.add("nutrition");
+                if (JRFitbitSDK.getInstance().isAuthorized()) {
 
-                JRFitbitSDK.getInstance().authorize(HomeActivity.this, list);
+                } else {
+                    JRFitbitSDK.getInstance().authorize(HomeActivity.this, list);
+                }
             }
         });
         initOkGo();
-        JRFitbitSDK.getInstance().initialize(CLIENT_ID, "senssunlife://home",Base64.encodeToString((CLIENT_ID + ":" + CLIENT_SECRET).getBytes(), Base64.DEFAULT),CODE_VERIFIER, MyApp.mApp);
+        JRFitbitSDK.getInstance().initialize(CLIENT_ID, "senssunlife://home", Base64.encodeToString((CLIENT_ID + ":" + CLIENT_SECRET).getBytes(), Base64.DEFAULT), CODE_VERIFIER, MyApp.mApp);
 
         Log.i("Test", "HEREREEE");
 
@@ -144,8 +147,7 @@ public class HomeActivity extends AppCompatActivity implements JRFBActivitySumma
     protected void onNewIntent(Intent intent) {
         Log.i("Test", "HEREREEE2");
 
-        if (intent!=null)
-        {
+        if (intent != null) {
             JRFitbitSDK.getInstance().getCode(intent);
         }
     }

@@ -6,4 +6,8 @@ public interface APICallback {
     void onGetPkceCode(CodeBean bean);
 
     void onRefreshToken(CodeBean bean);
+
+    void onLogWeight();
+
+    void onLogFat();
 }
