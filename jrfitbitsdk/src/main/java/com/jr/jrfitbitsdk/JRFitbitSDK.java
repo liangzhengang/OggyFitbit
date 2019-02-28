@@ -216,7 +216,7 @@ public class JRFitbitSDK {
         params.put("weight", weight);
         params.put("date", date);
         params.put("time", time);
-        OkGo.<String>post(APIContants.logWeight).params(params).execute(new StringCallback() {
+        OkGo.<String>post(APIContants.logWeight).params(params).headers("Authorization","Bearer "+codeBean.getAccess_token().trim()).execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 if (apiCallback != null)
@@ -230,7 +230,7 @@ public class JRFitbitSDK {
         params.put("weight", fat);
         params.put("date", date);
         params.put("time", time);
-        OkGo.<String>post(APIContants.logWeight).params(params).execute(new StringCallback() {
+        OkGo.<String>post(APIContants.logFat).params(params).headers("Authorization","Bearer "+codeBean.getAccess_token().trim()).execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 if (apiCallback != null)

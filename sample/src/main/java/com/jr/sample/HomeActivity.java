@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.jr.jrfitbitsdk.DefaultApiCallback;
 import com.jr.jrfitbitsdk.JRFBActivitySumAPI;
 import com.jr.jrfitbitsdk.JRFBActivitySummaryInterface;
 import com.jr.jrfitbitsdk.JRFBBaseAPI;
@@ -72,7 +73,12 @@ public class HomeActivity extends AppCompatActivity implements JRFBActivitySumma
                 list.add("weight");
                 list.add("nutrition");
                 if (JRFitbitSDK.getInstance().isAuthorized()) {
-
+                    JRFitbitSDK.getInstance().logWeight("70.0","2019-2-28","",new DefaultApiCallback(){
+                        @Override
+                        public void onLogWeight() {
+                            Log.d(TAG, "onLogWeight: ");
+                        }
+                    });
                 } else {
                     JRFitbitSDK.getInstance().authorize(HomeActivity.this, list);
                 }
@@ -91,6 +97,7 @@ public class HomeActivity extends AppCompatActivity implements JRFBActivitySumma
 
     }
 
+    private static final String TAG = "HomeActivity";
     public static String getRandomString(int length) {
         String str = "0123456789";
         Random random = new Random();
