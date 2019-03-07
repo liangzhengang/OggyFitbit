@@ -69,7 +69,7 @@ public class JRFitbitSDK {
     }
 
     public boolean isAuthorized() {
-        return codeBean != null;
+        return codeBean != null && (!TextUtils.isEmpty(codeBean.getAccess_token()));
     }
 
     public String userId() {
@@ -170,7 +170,10 @@ public class JRFitbitSDK {
     }
 
     public void logout() {
-        this.token.deleteToken(this.context);
+        this.codeBean = null;
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(CODESTRING, "");
+        editor.apply();
     }
 
     //===============================================================
@@ -216,7 +219,7 @@ public class JRFitbitSDK {
         params.put("weight", weight);
         params.put("date", date);
         params.put("time", time);
-        OkGo.<String>post(APIContants.logWeight).params(params).headers("Authorization","Bearer "+codeBean.getAccess_token().trim()).execute(new StringCallback() {
+        OkGo.<String>post(APIContants.logWeight).params(params).headers("Authorization", "Bearer " + codeBean.getAccess_token().trim()).execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 if (apiCallback != null)
@@ -227,10 +230,10 @@ public class JRFitbitSDK {
 
     public void logFat(String fat, String date, String time, final APICallback apiCallback) {
         HttpParams params = new HttpParams();
-        params.put("weight", fat);
+        params.put("fat", fat);
         params.put("date", date);
         params.put("time", time);
-        OkGo.<String>post(APIContants.logFat).params(params).headers("Authorization","Bearer "+codeBean.getAccess_token().trim()).execute(new StringCallback() {
+        OkGo.<String>post(APIContants.logFat).params(params).headers("Authorization", "Bearer " + codeBean.getAccess_token().trim()).execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 if (apiCallback != null)
