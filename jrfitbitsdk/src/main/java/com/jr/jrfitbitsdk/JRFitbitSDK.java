@@ -135,7 +135,7 @@ public class JRFitbitSDK {
         this.auth = null;
     }
 
-    public void getCode(Intent intent) {
+    public void getCode(Intent intent, final Callback callback) {
         Uri uri = intent.getData();
         String encodedFragment = uri.getEncodedFragment();
         String code = uri.getQueryParameter("code");
@@ -150,6 +150,8 @@ public class JRFitbitSDK {
                 @Override
                 public void onSuccess(Response<String> response) {
                     codeBean = new Gson().fromJson(response.body(), CodeBean.class);
+                    if (callback!=null)
+                        callback.onSuccess(codeBean);
                     Log.e("onSuccess", new Gson().toJson(codeBean) + response.body());
 
                     SharedPreferences.Editor editor = settings.edit();
@@ -240,5 +242,10 @@ public class JRFitbitSDK {
                     apiCallback.onLogFat();
             }
         });
+    }
+
+    public interface Callback{
+      void  onSuccess(CodeBean codeBean);
+      void  onfail();
     }
 }
